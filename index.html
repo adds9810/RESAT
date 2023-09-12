@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      span {
+        line-height: 1;
+      }
+      #wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+      }
+      #timer {
+        margin: 0;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      #timer form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #timer form div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+      }
+      #timer form input {
+        width: 50px;
+        text-align: right;
+      }
+      #timer form button {
+        width: 60px;
+        text-transform: uppercase;
+      }
+      #timer p {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid black;
+        font-size: 40px;
+        font-weight: bold;
+        line-height: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="timer">
+        <form action="#">
+          <div id="timerInput">
+            <input
+              type="number"
+              id="hour"
+              placeholder="시"
+              value="0"
+              min="0"
+            /><span>:</span
+            ><input
+              type="number"
+              id="minute"
+              placeholder="분"
+              maxlength="2"
+              value="0"
+              min="0"
+              max="59"
+            /><span>:</span>
+            <input
+              type="number"
+              id="second"
+              placeholder="초"
+              maxlength="2"
+              value="0"
+              max="59"
+            />
+          </div>
+          <p>
+            <span id="hourNum">00</span>:<span id="minuteNum">00</span>:<span
+              id="secondNum"
+              >00</span
+            >
+          </p>
+          <div>
+            <button id="startBtn" onclick="startEvt()">start</button>
+            <button id="stopBtn" disabled onclick="stopEvt()">stop</button>
+            <button id="resetBtn" onclick="resetEvt()">reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      const timerInput = document.querySelector("#timerInput");
+      const hour = document.querySelector("#hour");
+      const minute = document.querySelector("#minute");
+      const second = document.querySelector("#second");
+      const hourNum = document.querySelector("#hourNum");
+      const minuteNum = document.querySelector("#minuteNum");
+      const secondNum = document.querySelector("#secondNum");
+      const startBtn = document.querySelector("#startBtn");
+      const stopBtn = document.querySelector("#stopBtn");
+      const resetBtn = document.querySelector("#resetBtn");
+      const resetNum = 0;
+
+      //timer event
+      let isPlay = false;
+      let timer;
+      let timerHour = resetNum;
+      let timerMinute = resetNum;
+      let timerSecond = resetNum;
+      function timerEvt() {
+        if (isPlay);
+        if (timerSecond > 0) {
+          timerSecond--;
+          writeTimer();
+        } else {
+          if (timerHour > 0 || timerMinute > 0) {
+            timerSecond = 59;
+            if (timerHour > 0 && timerMinute == 0) {
+              timerHour--;
+              timerMinute = 60;
+            }
+            if (timerMinute > 0) {
+              timerMinute--;
+            }
+            writeTimer();
+          } else {
+            clearInterval(timer);
+            resetEvt();
+          }
+        }
+      }
+      function writeTimer() {
+        hourNum.innerText =
+          String(timerHour).length < 2 ? "0" + timerHour : timerHour;
+        minuteNum.innerText =
+          String(timerMinute).length < 2 ? "0" + timerMinute : timerMinute;
+        secondNum.innerText =
+          String(timerSecond).length < 2 ? "0" + timerSecond : timerSecond;
+      }
+
+      // start event
+      function startEvt() {
+        if (!isPlay) {
+          isPlay = true;
+          timerInput.style.display = "none";
+
+          timerHour = hour.value;
+          timerMinute = minute.value;
+          timerSecond = second.value;
+          writeTimer();
+        }
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        resetBtn.disabled = true;
+        timer = setInterval(timerEvt, 1000);
+      }
+      // stop event
+      function stopEvt() {
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        resetBtn.disabled = false;
+        clearInterval(timer);
+      }
+
+      // reset event
+      function resetEvt() {
+        isPlay = false;
+        timerInput.style.display = "flex";
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        resetBtn.disabled = false;
+
+        timerHour = resetNum;
+        timerMinute = resetNum;
+        timerSecond = resetNum;
+        hour.value = resetNum;
+        minute.value = resetNum;
+        second.value = resetNum;
+        writeTimer();
+      }
+    </script>
+  </body>
+</html>
