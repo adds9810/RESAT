@@ -143,6 +143,8 @@
           }
         }
       }
+
+      // 타이머 표시
       function writeTimer() {
         hourNum.innerText =
           String(timerHour).length < 2 ? "0" + timerHour : timerHour;
@@ -150,6 +152,13 @@
           String(timerMinute).length < 2 ? "0" + timerMinute : timerMinute;
         secondNum.innerText =
           String(timerSecond).length < 2 ? "0" + timerSecond : timerSecond;
+      }
+
+      // 버튼 활성화 컨트롤
+      function controlBtn(isStart, isStop, isReset) {
+        startBtn.disabled = isStart;
+        stopBtn.disabled = isStop;
+        resetBtn.disabled = isReset;
       }
 
       // start event
@@ -163,16 +172,13 @@
           timerSecond = second.value;
           writeTimer();
         }
-        startBtn.disabled = true;
-        stopBtn.disabled = false;
-        resetBtn.disabled = true;
+        controlBtn(true, false, true);
         timer = setInterval(timerEvt, 1000);
       }
+
       // stop event
       function stopEvt() {
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        resetBtn.disabled = false;
+        controlBtn(false, true, false);
         clearInterval(timer);
       }
 
@@ -180,9 +186,7 @@
       function resetEvt() {
         isPlay = false;
         timerInput.style.display = "flex";
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        resetBtn.disabled = false;
+        controlBtn(false, true, false);
 
         timerHour = resetNum;
         timerMinute = resetNum;
