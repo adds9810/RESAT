@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>todo list</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style: none;
+      }
+      span {
+        line-height: 1;
+      }
+      input[type="radio"] {
+        display: none;
+      }
+      input[type="radio"] + label {
+        flex: 1 0 auto;
+        font-size: 14px;
+        line-height: 1;
+        text-align: center;
+        padding: 5px;
+        border-radius: 5px;
+        background: #f3f8fc;
+        color: #66747e;
+      }
+      input[type="radio"]:checked + label {
+        background: #2369ef;
+        color: #fff;
+      }
+
+      #wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+      }
+      #todoWrap {
+        margin: 0;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #todoWrap h1 {
+        line-height: 1;
+      }
+      #todoWrap button {
+        line-height: 1;
+        padding: 8px 0;
+        border: 0 none;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1;
+        background: #2369ef;
+        color: #fff;
+      }
+      #todoWrap #todoForm {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 300px;
+      }
+      #todoWrap #todoForm input[type="text"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid black;
+        font-size: 14px;
+        line-height: 1;
+      }
+      #importantWrap,
+      #todoTap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+      }
+      #todoList {
+        margin-top: 10px;
+      }
+      #todoList li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="todoWrap">
+        <h1>TODO LIST</h1>
+        <div id="todoForm">
+          <input
+            type="text"
+            id="todo"
+            name="todo"
+            placeholder="할 일을 작성해주세요"
+          />
+          <div id="importantWrap">
+            <input
+              type="radio"
+              id="important1"
+              name="todoImportant"
+              value="0"
+            />
+            <label for="important1">아주 높음</label>
+            <input
+              type="radio"
+              id="important2"
+              name="todoImportant"
+              value="1"
+            />
+            <label for="important2">높음</label>
+            <input
+              type="radio"
+              id="important3"
+              name="todoImportant"
+              value="2"
+            />
+            <label for="important3">보통</label>
+            <input
+              type="radio"
+              id="important4"
+              name="todoImportant"
+              value="3"
+            />
+            <label for="important4">낮음</label>
+          </div>
+          <button id="addBtn" onclick="addEvt()">추가</button>
+          <div id="todoTap">
+            <input
+              type="radio"
+              id="todoVal1"
+              name="todoVal"
+              value="0"
+              onclick="writeTodo()"
+            />
+            <label for="todoVal1">전체</label>
+            <input
+              type="radio"
+              id="todoVal2"
+              name="todoVal"
+              value="1"
+              onclick="writeTodo()"
+            />
+            <label for="todoVal2">완료</label>
+            <input
+              type="radio"
+              id="todoVal3"
+              name="todoVal"
+              value="2"
+              onclick="writeTodo()"
+            />
+            <label for="todoVal3">미완료</label>
+          </div>
+          <ul id="todoList"></ul>
+        </div>
+      </div>
+    </div>
+    <script>
+      const todo = document.querySelector("#todo");
+      const todoList = document.querySelector("#todoList");
+      let todoData = [];
+
+      document.querySelector("#important1").checked = true;
+      document.querySelector("#todoVal1").checked = true;
+
+      // 추가
+      function addEvt() {
+        if (
+          todo.value !== "" &&
+          todo.value !== undefined &&
+          todo.value !== null &&
+          String(todo.value).length > 0
+        ) {
+          const todoImportant = document.querySelector(
+            "input[name='todoImportant']:checked"
+          ).value;
+
+          todoData.push({
+            value: todo.value,
+            rating: todoImportant,
+            checked: false,
+          });
+
+          writeTodo();
+        } else {
+          alert("할 일을 입력해주세요");
+        }
+      }
+
+      // 체크 확인 이벤트
+      function checkEvt(num) {
+        let editData = todoData.map((item, index) =>
+          index === num
+            ? { value: item.value, rating: item.rating, checked: !item.checked }
+            : item
+        );
+        todoData = editData;
+        writeTodo();
+      }
+
+      // 출력 이벤트
+      function writeTodo() {
+        const todoVal = document.querySelector(
+          "input[name='todoVal']:checked"
+        ).value;
+
+        let todoHtml = "";
+        let listGroup = todoData;
+        if (todoVal == 1) {
+          listGroup = todoData.filter((item) => item.checked);
+        } else if (todoVal == 2) {
+          listGroup = todoData.filter((item) => !item.checked);
+        }
+
+        for (let i = 0; i < listGroup.length; i++) {
+          let importantTxt =
+            listGroup[i].rating == 0
+              ? "아주 높음"
+              : listGroup[i].rating == 1
+              ? "높음"
+              : listGroup[i].rating == 2
+              ? "보통"
+              : "낮음";
+          let chkVal = listGroup[i].checked == true ? "checked" : "";
+          todoHtml += `<li><label for="todo${i}">
+                            <input type="checkbox" id="todo${i}" name="todo" value="${listGroup[i].value}" ${chkVal} onClick="checkEvt(${i})"/>
+                            ${listGroup[i].value}</label><span>${importantTxt}</span>
+                        </li>`;
+        }
+        todoList.innerHTML = todoHtml;
+      }
+    </script>
+  </body>
+</html>
