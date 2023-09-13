@@ -56,7 +56,7 @@
       }
       #todoWrap button {
         line-height: 1;
-        padding: 8px 0;
+        padding: 8px 5px;
         border: 0 none;
         border-radius: 5px;
         font-size: 14px;
@@ -89,6 +89,7 @@
         margin-top: 10px;
       }
       #todoList li {
+        margin-top: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -170,12 +171,12 @@
     <script>
       const todo = document.querySelector("#todo");
       const todoList = document.querySelector("#todoList");
-      let todoData = [];
+      let todoDataGroup = [];
 
       document.querySelector("#important1").checked = true;
       document.querySelector("#todoVal1").checked = true;
 
-      // 추가
+      // 추가 이벤트
       function addEvt() {
         if (
           todo.value !== "" &&
@@ -187,7 +188,7 @@
             "input[name='todoImportant']:checked"
           ).value;
 
-          todoData.push({
+          todoDataGroup.push({
             value: todo.value,
             rating: todoImportant,
             checked: false,
@@ -201,12 +202,25 @@
 
       // 체크 확인 이벤트
       function checkEvt(num) {
-        let editData = todoData.map((item, index) =>
+        let editData = todoDataGroup.map((item, index) =>
           index === num
             ? { value: item.value, rating: item.rating, checked: !item.checked }
             : item
         );
-        todoData = editData;
+        todoDataGroup = editData;
+        writeTodo();
+      }
+
+      // 수정 이벤트
+      function editEvt(num) {
+        const editTxt = document.querySelector(`#todoData${num}`).value;
+
+        let editData = todoDataGroup.map((item, index) =>
+          index === num && item.value != editTxt
+            ? { value: editTxt, rating: item.rating, checked: item.checked }
+            : item
+        );
+        todoDataGroup = editData;
         writeTodo();
       }
 
@@ -217,27 +231,35 @@
         ).value;
 
         let todoHtml = "";
-        let listGroup = todoData;
+        let listGroup = todoDataGroup;
         if (todoVal == 1) {
-          listGroup = todoData.filter((item) => item.checked);
+          listGroup = todoDataGroup.filter((item) => item.checked);
         } else if (todoVal == 2) {
-          listGroup = todoData.filter((item) => !item.checked);
+          listGroup = todoDataGroup.filter((item) => !item.checked);
         }
 
         for (let i = 0; i < listGroup.length; i++) {
-          let importantTxt =
-            listGroup[i].rating == 0
-              ? "아주 높음"
-              : listGroup[i].rating == 1
-              ? "높음"
-              : listGroup[i].rating == 2
-              ? "보통"
-              : "낮음";
+          let importantColor = "orange";
+          let importantTxt = "낮음";
+          if (listGroup[i].rating == 0) {
+            importantColor = "red";
+            importantTxt = "아주 높음";
+          } else if (listGroup[i].rating == 1) {
+            importantColor = "blue";
+            importantTxt = "높음";
+          } else if (listGroup[i].rating == 2) {
+            importantColor = "green";
+            importantTxt = "보통";
+          }
+
           let chkVal = listGroup[i].checked == true ? "checked" : "";
           todoHtml += `<li><label for="todo${i}">
-                            <input type="checkbox" id="todo${i}" name="todo" value="${listGroup[i].value}" ${chkVal} onClick="checkEvt(${i})"/>
-                            ${listGroup[i].value}</label><span>${importantTxt}</span>
-                        </li>`;
+                              <input type="checkbox" id="todo${i}" name="todo" value="${listGroup[i].value}" ${chkVal} onClick="checkEvt(${i})"/>
+                              (<span style="color:${importantColor};">${importantTxt}</span>)
+                              <input type="text" id="todoData${i}" name="todoData${i}" placeholder="할 일을 작성해주세요" value="${listGroup[i].value}" />
+                            </label>
+                            <button id="eidtBtn" onclick="editEvt(${i})">수정</button>
+                      </li>`;
         }
         todoList.innerHTML = todoHtml;
       }
