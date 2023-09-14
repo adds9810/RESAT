@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calendar</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        box-sizing: border-box;
+      }
+      #calendar {
+        max-width: 820px;
+        padding: 0 15px;
+        margin: 5px auto;
+      }
+
+      #dateHead {
+        margin-bottom: 5px;
+      }
+
+      #dateHead div {
+        background: #2369ef;
+        color: #fff;
+        text-align: center;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-gap: 5px;
+      }
+
+      .grid div {
+        padding: 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      #dateBoard div {
+        color: #222;
+        font-weight: bold;
+        min-height: 60px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #eee;
+      }
+
+      .noColor {
+        background: #eee;
+      }
+
+      #header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+      }
+
+      .btn {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #000;
+        border-width: 3px 3px 0 0;
+        cursor: pointer;
+      }
+
+      #prevDay {
+        transform: rotate(-135deg);
+      }
+
+      #nextDay {
+        transform: rotate(45deg);
+      }
+
+      #memoWrap {
+        margin: 50px auto 0;
+        max-width: 500px;
+      }
+      #memoWrap ul,
+      #memoWrap div {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="calendar">
+        <div id="header">
+          <div class="btn" id="prevDay"></div>
+          <h2 id="dateTitle"></h2>
+          <div class="btn" id="nextDay"></div>
+        </div>
+
+        <div class="grid" id="dateHead">
+          <div>일</div>
+          <div>월</div>
+          <div>화</div>
+          <div>수</div>
+          <div>목</div>
+          <div>금</div>
+          <div>토</div>
+        </div>
+
+        <div class="grid" id="dateBoard"></div>
+      </div>
+      <div id="memoWrap">
+        date : <span id="todoDate"></span>
+        <ul>
+          <li>
+            <input type="text" /><button onclick="editMemo()">수정</button>
+          </li>
+        </ul>
+        <div>
+          <input type="text" /><button onclick="addMemo()">추가</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // 임시 데이터
+      const data = [
+        { date: "2023-10-15", content: "테스트1" },
+        { date: "2023-10-03", content: "테스트2" },
+        { date: "2023-10-15", content: "테스트3" },
+        { date: "2023-10-26", content: "테스트4" },
+        { date: "2023-10-21", content: "테스트5" },
+      ];
+
+      // 데이터 가공
+      const calendarList = data.reduce(
+        (acc, v) => ({ ...acc, [v.date]: [...(acc[v.date] || []), v.content] }),
+        {}
+      );
+
+      // pad method
+      Number.prototype.pad = function () {
+        return this > 9 ? this : "0" + this;
+      };
+
+      // 달력 생성 및 오늘날짜 세팅
+      const makeCalendar = (date) => {
+        // 현재의 년도와 월 받아오기
+        const currentYear = new Date(date).getFullYear();
+        const currentMonth = new Date(date).getMonth() + 1;
+        const currentDate = new Date(date).getDate();
+
+        writeList(`${currentYear}-${currentMonth.pad()}-${currentDate.pad()}`);
+
+        // 한달전의 마지막 요일
+        const firstDay = new Date(date.setDate(1)).getDay();
+        // 현재 월의 마지막 날 구하기
+        const lastDay = new Date(currentYear, currentMonth, 0).getDate();
+
+        // 남은 박스만큼 다음달 날짜 표시
+        const limitDay = firstDay + lastDay;
+        const nextDay = Math.ceil(limitDay / 7) * 7;
+
+        let htmlDummy = "";
+
+        // 한달전 날짜 표시하기
+        for (let i = 0; i < firstDay; i++) {
+          htmlDummy += `<div class="noColor"></div>`;
+        }
+
+        // 이번달 날짜 표시하기
+        for (let i = 1; i <= lastDay; i++) {
+          const date = `${currentYear}-${currentMonth.pad()}-${i.pad()}`;
+
+          htmlDummy += `
+      <div>
+        <button onclick="writeList('${date}')">${i}</button>
+      </div>
+    `;
+        }
+
+        // 다음달 날짜 표시하기
+        for (let i = limitDay; i < nextDay; i++) {
+          htmlDummy += `<div class="noColor"></div>`;
+        }
+
+        document.querySelector(`#dateBoard`).innerHTML = htmlDummy;
+        document.querySelector(
+          `#dateTitle`
+        ).innerText = `${currentYear}년 ${currentMonth}월`;
+      };
+
+      const date = new Date();
+
+      makeCalendar(date);
+
+      // 이전달 이동
+      document.querySelector(`#prevDay`).onclick = () => {
+        makeCalendar(new Date(date.setMonth(date.getMonth() - 1)));
+      };
+
+      // 다음달 이동
+      document.querySelector(`#nextDay`).onclick = () => {
+        makeCalendar(new Date(date.setMonth(date.getMonth() + 1)));
+      };
+
+      function writeList(clickDate) {
+        document.querySelector("#todoDate").innerText = clickDate;
+      }
+    </script>
+  </body>
+</html>
