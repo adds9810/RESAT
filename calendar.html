@@ -36,7 +36,6 @@
       .grid div {
         padding: 10px;
         font-size: 12px;
-        cursor: pointer;
       }
 
       #dateBoard div {
@@ -46,6 +45,15 @@
         padding: 5px;
         border-radius: 5px;
         border: 1px solid #eee;
+      }
+
+      #dateBoard div button {
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+      }
+      #dateBoard div button.on {
+        color: orange;
       }
 
       .noColor {
@@ -77,11 +85,33 @@
 
       #memoWrap {
         margin: 50px auto 0;
-        max-width: 500px;
+        padding: 0 15px;
+        max-width: 820px;
       }
       #memoWrap ul,
       #memoWrap div {
         margin-top: 20px;
+      }
+      #memoWrap ul li {
+        margin-top: 5px;
+      }
+      #memoWrap input {
+        padding: 6px;
+        border-radius: 5px;
+        border: 1px solid black;
+        font-size: 14px;
+        line-height: 1;
+      }
+      #memoWrap button {
+        margin-left: 5px;
+        line-height: 1;
+        padding: 8px 5px;
+        border: 0 none;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1;
+        background: #2369ef;
+        color: #fff;
       }
     </style>
   </head>
@@ -107,36 +137,80 @@
         <div class="grid" id="dateBoard"></div>
       </div>
       <div id="memoWrap">
-        date : <span id="todoDate"></span>
-        <ul>
-          <li>
-            <input type="text" /><button onclick="editMemo()">수정</button>
-          </li>
-        </ul>
+        <strong>date :</strong> <span id="todoDate"></span>
         <div>
-          <input type="text" /><button onclick="addMemo()">추가</button>
+          <input type="text" id="memoInput" /><button onclick="addMemo()">
+            추가
+          </button>
         </div>
+        <ul id="memoList"></ul>
       </div>
     </div>
     <script>
       // 임시 데이터
-      const data = [
-        { date: "2023-10-15", content: "테스트1" },
-        { date: "2023-10-03", content: "테스트2" },
-        { date: "2023-10-15", content: "테스트3" },
-        { date: "2023-10-26", content: "테스트4" },
-        { date: "2023-10-21", content: "테스트5" },
+      let data = [
+        { id: 0, date: "2023-09-15", content: "테스트1" },
+        { id: 1, date: "2023-10-15", content: "테스트2" },
+        { id: 2, date: "2023-10-15", content: "테스트3" },
+        { id: 3, date: "2023-10-26", content: "테스트4" },
+        { id: 4, date: "2023-10-21", content: "테스트5" },
       ];
-
-      // 데이터 가공
-      const calendarList = data.reduce(
-        (acc, v) => ({ ...acc, [v.date]: [...(acc[v.date] || []), v.content] }),
-        {}
-      );
+      const memoData = [];
+      let activeDate = "";
 
       // pad method
       Number.prototype.pad = function () {
         return this > 9 ? this : "0" + this;
+      };
+
+      // 일정 불러오기
+      const writeList = (onDate) => {
+        const memoList = document.querySelector(`#memoList`);
+        let listGroup = data.filter((item) => item.date === onDate);
+        let listHTML = "";
+        for (let i = 0; i < listGroup.length; i++) {
+          listHTML += `<li><input type="text" id="memoData${listGroup[i].id}" value="${listGroup[i].content}"/><button onclick="editMemo(${listGroup[i].id})">수정</button></li>`;
+        }
+        activeDate = onDate;
+
+        document.querySelector("#todoDate").innerText = onDate;
+        memoList.innerHTML = listHTML;
+      };
+
+      // 일정 추가하기
+      const addMemo = () => {
+        const memoInput = document.querySelector(`#memoInput`).value;
+
+        if (
+          memoInput !== "" &&
+          memoInput !== undefined &&
+          memoInput !== null &&
+          String(memoInput).length > 0
+        ) {
+          const setDate = new Date(activeDate);
+
+          data.push({
+            id: Number(data.length),
+            date: activeDate,
+            content: memoInput,
+          });
+          makeCalendar(setDate);
+        } else {
+          alert("입력해주세요");
+        }
+      };
+
+      // 일정 수정하기
+      const editMemo = (num) => {
+        const editTxt = document.querySelector(`#memoData${num}`).value;
+        const dataList = data.filter((item) => item.date === activeDate);
+        let editData = dataList.map((item, index) =>
+          item.id === num && item.content != editTxt
+            ? { id: item.id, date: item.date, content: editTxt }
+            : item
+        );
+        data = editData;
+        writeList(activeDate);
       };
 
       // 달력 생성 및 오늘날짜 세팅
@@ -145,8 +219,17 @@
         const currentYear = new Date(date).getFullYear();
         const currentMonth = new Date(date).getMonth() + 1;
         const currentDate = new Date(date).getDate();
+        activeDate = `${currentYear}-${currentMonth.pad()}-${currentDate.pad()}`;
+        writeList(activeDate);
 
-        writeList(`${currentYear}-${currentMonth.pad()}-${currentDate.pad()}`);
+        // 데이터 가공
+        const calendarList = data.reduce(
+          (acc, v) => ({
+            ...acc,
+            [v.date]: [...(acc[v.date] || []), v.content],
+          }),
+          {}
+        );
 
         // 한달전의 마지막 요일
         const firstDay = new Date(date.setDate(1)).getDay();
@@ -167,12 +250,8 @@
         // 이번달 날짜 표시하기
         for (let i = 1; i <= lastDay; i++) {
           const date = `${currentYear}-${currentMonth.pad()}-${i.pad()}`;
-
-          htmlDummy += `
-      <div>
-        <button onclick="writeList('${date}')">${i}</button>
-      </div>
-    `;
+          const colorBtn = calendarList[date] ? "on" : "";
+          htmlDummy += `<div><button class="${colorBtn}" onclick="writeList('${date}')">${i}</button></div>`;
         }
 
         // 다음달 날짜 표시하기
@@ -199,10 +278,6 @@
       document.querySelector(`#nextDay`).onclick = () => {
         makeCalendar(new Date(date.setMonth(date.getMonth() + 1)));
       };
-
-      function writeList(clickDate) {
-        document.querySelector("#todoDate").innerText = clickDate;
-      }
     </script>
   </body>
 </html>
