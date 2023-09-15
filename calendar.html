@@ -15,6 +15,7 @@
         max-width: 820px;
         padding: 0 15px;
         margin: 5px auto;
+        text-align: center;
       }
 
       #dateHead {
@@ -24,7 +25,6 @@
       #dateHead div {
         background: #2369ef;
         color: #fff;
-        text-align: center;
       }
 
       .grid {
@@ -45,6 +45,7 @@
         padding: 5px;
         border-radius: 5px;
         border: 1px solid #eee;
+        text-align: left;
       }
 
       #dateBoard div button {
@@ -85,11 +86,22 @@
 
       #memoWrap {
         margin: 50px auto 0;
-        padding: 0 15px;
+        padding: 15px;
         max-width: 820px;
+        border: 1px solid #eee;
       }
-      #memoWrap ul,
+
       #memoWrap div {
+        margin-top: 10px;
+      }
+      #memoWrap div,
+      #memoWrap ul li {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      #memoWrap ul {
         margin-top: 20px;
       }
       #memoWrap ul li {
@@ -101,9 +113,9 @@
         border: 1px solid black;
         font-size: 14px;
         line-height: 1;
+        flex: 1 0 auto;
       }
       #memoWrap button {
-        margin-left: 5px;
         line-height: 1;
         padding: 8px 5px;
         border: 0 none;
@@ -118,6 +130,7 @@
   <body>
     <div id="wrap">
       <div id="calendar">
+        <h1>캘린더</h1>
         <div id="header">
           <div class="btn" id="prevDay"></div>
           <h2 id="dateTitle"></h2>
@@ -137,9 +150,11 @@
         <div class="grid" id="dateBoard"></div>
       </div>
       <div id="memoWrap">
-        <strong>date :</strong> <span id="todoDate"></span>
+        <div><strong>date :</strong> <span id="todoDate"></span></div>
         <div>
-          <input type="text" id="memoInput" /><button onclick="addMemo()">
+          일정 추가 : <input type="text" id="memoInput" /><button
+            onclick="addMemo()"
+          >
             추가
           </button>
         </div>
