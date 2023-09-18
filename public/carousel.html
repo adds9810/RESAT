@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>carousel</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        box-sizing: border-box;
+        text-decoration: none;
+      }
+      .carousel {
+        position: relative;
+        overflow: hidden;
+        background: gray;
+      }
+      .carousel-wrap {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        transition: all ease-in-out 0.3s;
+      }
+      .carousel-item {
+        width: 100%;
+        flex: 1 0 auto;
+      }
+      .carousel-item img {
+        display: block;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+      .arr-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        line-height: 1;
+        background: transparent;
+        border: 0 none;
+      }
+      #prevBtn {
+        left: 10px;
+      }
+      #nextBtn {
+        right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div class="carousel">
+        <div class="carousel-wrap">
+          <div class="carousel-item">
+            <img src="https://via.placeholder.com/1920x100" alt="샘플이미지" />
+          </div>
+          <div class="carousel-item">
+            <img src="https://via.placeholder.com/150x20" alt="샘플이미지" />
+          </div>
+          <div class="carousel-item">
+            <img src="https://via.placeholder.com/150" alt="샘플이미지" />
+          </div>
+          <div class="carousel-item">
+            <img src="https://via.placeholder.com/300x600" alt="샘플이미지" />
+          </div>
+        </div>
+        <button class="arr-btn" id="prevBtn" onclick="moveSlide('prev')">
+          ◀</button
+        ><button class="arr-btn" id="nextBtn" onclick="moveSlide('next')">
+          ▶
+        </button>
+      </div>
+    </div>
+    <script>
+      const carousel = document.querySelector(".carousel");
+      const carouselWrap = carousel.querySelector(".carousel-wrap");
+      const carouselItem = carouselWrap.querySelectorAll(".carousel-item");
+
+      const prevBtn = document.querySelector("#prevBtn");
+      const nextBtn = document.querySelector("#nextBtn");
+
+      let activeSlide = 0;
+
+      function changeSlider(num) {
+        for (let i = 0; i < carouselItem.length; i++) {
+          carouselItem[i].classList.remove("active");
+        }
+        carouselItem[num].classList.add("active");
+        prevBtn.disabled = num === 0 ? true : false;
+        nextBtn.disabled = num >= carouselItem.length - 1 ? true : false;
+      }
+
+      function moveSlide(arr) {
+        activeSlide = arr === "next" ? activeSlide + 1 : activeSlide - 1;
+
+        let moveNum = 0;
+        for (let i = 0; i < activeSlide; i++) {
+          moveNum += carousel.offsetWidth;
+        }
+        carouselWrap.style.transform = `translateX(-${moveNum}px)`;
+
+        changeSlider(activeSlide);
+      }
+
+      changeSlider(0);
+    </script>
+  </body>
+</html>
