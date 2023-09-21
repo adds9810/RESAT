@@ -438,18 +438,20 @@
           height: 100%;
           z-index: 0;
           top: 0;
-          left: 0;
+          left: 100%;
           background: white;
           flex: 0;
           flex-direction: column;
           justify-content: center;
           padding: 0 15px;
           transform: translateX(100%);
-          transition: transform 0.3s ease-in-out;
+          transition: transform 0.3s ease-in-out, left 0s ease 0.35s;
           z-index: -1;
         }
         #header .header-menu.active {
+          left: 0;
           transform: translateX(0);
+          transition: transform 0.3s ease-in-out;
         }
         #header ul {
           flex-direction: column;
@@ -474,6 +476,11 @@
         .search-wrap {
           top: 45px;
         }
+        .search-wrap .container div,
+        .search-wrap select,
+        .search-wrap input {
+          flex: 1 0 auto;
+        }
       }
       /* 모바일 */
       @media (max-width: 767px) {
@@ -485,12 +492,6 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
-        }
-        .search-wrap .container div,
-        .search-wrap select,
-        .search-wrap input,
-        .search-wrap button {
-          flex: 1 0 auto;
         }
       }
     </style>
