@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1080px" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>main</title>
     <style>
       * {
@@ -14,6 +14,7 @@
       }
       .container {
         margin: 0 auto;
+        padding: 0 15px;
         max-width: 930px;
         width: 100%;
       }
@@ -24,10 +25,8 @@
         display: flex;
         -webkit-box-align: center;
         align-items: center;
-        cursor: pointer;
         height: 100%;
-        padding-left: 16px;
-        padding-right: 13px;
+        padding: 0 15px;
         border-bottom: 1px solid rgba(0, 56, 68, 0.1);
         position: sticky;
         top: 0;
@@ -40,33 +39,38 @@
         display: flex;
         -webkit-box-align: center;
         align-items: center;
-        cursor: pointer;
         justify-content: space-between;
         max-width: 100%;
         height: 100%;
-        padding-left: 16px;
-        padding-right: 13px;
+        padding: 0;
       }
-      #header h1 {
-        cursor: pointer;
-        height: 100%;
-        padding-left: 16px;
-        padding-right: 13px;
-      }
-      #header .header-left,
+      #header h1,
+      #header .header-menu,
       #header ul {
         display: flex;
         align-items: center;
+      }
+      #header h1 {
+        height: 100%;
+        padding: 0 15px;
+      }
+      #header h1 img {
+        display: block;
+        max-width: 100%;
+      }
+      #header .header-menu {
+        justify-content: space-between;
+        flex: 1 0 auto;
       }
       #header ul li a {
         position: relative;
         font-size: 0.875rem;
         cursor: pointer;
-        padding: 1.25rem 1rem;
+        padding: 19.5px 16px;
         display: flex;
         -webkit-box-align: center;
         align-items: center;
-        transition: color 0.2s ease-in-out 0s;
+        transition: color 0.2s ease-in-out;
         font-weight: 400;
         color: rgb(171, 177, 177);
       }
@@ -90,8 +94,53 @@
         opacity: 1;
         transform: scaleX(1);
       }
-      #header ul.header-right li:not(:first-child) a {
+      #header .header-menu > ul li:not(:first-child) a {
         color: rgb(23, 161, 255);
+      }
+      #header .menu-btn {
+        display: none;
+        position: relative;
+        width: 24px;
+        height: 20px;
+        background: #fff;
+        border: 0 none;
+        cursor: pointer;
+      }
+      #header .menu-btn span {
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        border-radius: 10px;
+        background: black;
+        transition: all ease 0.2s;
+        opacity: 1;
+      }
+      #header .menu-btn span:nth-child(1) {
+        top: 0;
+      }
+      #header .menu-btn span:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      #header .menu-btn span:nth-child(3) {
+        top: 18px;
+      }
+      #header .menu-btn.active span:nth-child(1) {
+        top: 0;
+        left: 5px;
+        transform: rotate(45deg);
+        transform-origin: top left;
+      }
+      #header .menu-btn.active span:nth-child(2) {
+        opacity: 0;
+      }
+      #header .menu-btn.active span:nth-child(3) {
+        top: 17px;
+        left: 5px;
+        transform: rotate(-45deg);
+        transform-origin: bottom left;
       }
       #main {
       }
@@ -134,7 +183,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        padding: 50px 0 0 80px;
+        padding: 50px 80px;
         opacity: 0;
         transform: translateX(-10px);
         transition: all linear 0.2s 0.4s;
@@ -184,7 +233,7 @@
         height: 10px;
         border-radius: 100%;
         background: white;
-        opacity: 0.2;
+        opacity: 0.5;
       }
       .carousel-index li.active a {
         background: orange;
@@ -218,7 +267,6 @@
       }
       .search-wrap {
         width: 100%;
-        height: 60px;
         display: flex;
         -webkit-box-pack: center;
         justify-content: center;
@@ -229,7 +277,8 @@
         top: 58px;
         left: 0;
         background: #fff;
-        z-index: 10;
+        z-index: 9;
+        padding: 10px 0;
       }
       .search-wrap .container,
       .search-wrap .container div {
@@ -238,6 +287,7 @@
         justify-content: space-between;
         -webkit-box-align: center;
         align-items: center;
+        flex-wrap: wrap;
         gap: 16px;
       }
       .search-wrap select,
@@ -257,12 +307,13 @@
       }
       .search-wrap button {
         padding: 6px 10px;
+        justify-content: center;
       }
       .edu-list {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 24px;
-        width: 936px;
+        width: 100%;
         margin-bottom: 24px;
       }
       .edu-list li {
@@ -307,6 +358,7 @@
         font-size: 12px;
         padding: 10px 20px;
         transform: translateX(90%);
+        font-weight: 700;
       }
       .edu-list li a:hover div.img-wrap span {
         transform: translateX(0);
@@ -357,6 +409,89 @@
         display: flex;
         justify-content: space-between;
         align-items: start;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      #footer .container ul {
+        display: flex;
+        justify-content: flex-start;
+        align-items: start;
+        flex-wrap: wrap;
+        gap: 0 10px;
+      }
+      #footer .container ul li,
+      #footer .container a {
+        color: rgb(147, 153, 153);
+        font-size: 12px;
+      }
+      /* 태블릿? */
+      @media (max-width: 1079px) {
+        #header {
+          padding: 10px 15px;
+        }
+        #header h1 {
+          padding: 0;
+        }
+        #header .header-menu {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+          top: 0;
+          left: 0;
+          background: white;
+          flex: 0;
+          flex-direction: column;
+          justify-content: center;
+          padding: 0 15px;
+          transform: translateX(100%);
+          transition: transform 0.3s ease-in-out;
+          z-index: -1;
+        }
+        #header .header-menu.active {
+          transform: translateX(0);
+        }
+        #header ul {
+          flex-direction: column;
+          justify-content: center;
+          gap: 10px;
+        }
+        #header ul li a {
+          padding: 5px;
+        }
+        #header ul.right-menu {
+          margin-top: 10px;
+        }
+        #header .menu-btn {
+          display: block;
+        }
+        .edu-list {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .carousel-content {
+          padding: calc(50 / 930 * 100%) 50px;
+        }
+        .search-wrap {
+          top: 45px;
+        }
+      }
+      /* 모바일 */
+      @media (max-width: 767px) {
+        .edu-list {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .carousel-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .search-wrap .container div,
+        .search-wrap select,
+        .search-wrap input,
+        .search-wrap button {
+          flex: 1 0 auto;
+        }
       }
     </style>
   </head>
@@ -364,31 +499,35 @@
     <div id="wrap">
       <header id="header">
         <div class="container">
-          <div class="header-left">
-            <h1>
-              <a href="javascript:;"
-                ><img
-                  src="https://via.placeholder.com/135x24.jpg"
-                  alt="135 * 24 size image"
-              /></a>
-            </h1>
+          <h1>
+            <a href="javascript:;"
+              ><img
+                src="https://via.placeholder.com/135x24.jpg"
+                alt="135 * 24 size image"
+            /></a>
+          </h1>
+          <div class="header-menu">
             <nav>
               <h2 class="blind">미니인턴 menu</h2>
-              <ul>
-                <li><a class="on" href="javascript:;">미니인턴</a></li>
+              <ul class="left-menu">
+                <li><a class="on" href="javascript:;">Home</a></li>
                 <li><a href="javascript:;">스킬업</a></li>
                 <li><a href="javascript:;">M클래스</a></li>
                 <li><a href="javascript:;">채용관</a></li>
                 <li><a href="javascript:;">해피폴리오</a></li>
               </ul>
             </nav>
+            <ul class="right-menu">
+              <li><a href="javascript:;">About</a></li>
+              <li><a href="javascript:;">회원가입</a></li>
+              <li><a href="javascript:;">로그인</a></li>
+              <li><a href="javascript:;">Contact</a></li>
+              <li><a href="javascript:;">FAQ</a></li>
+            </ul>
           </div>
-          <ul class="header-right">
-            <li><a href="javascript:;">서비스 소개</a></li>
-            <li><a href="javascript:;">회원가입</a></li>
-            <li><a href="javascript:;">로그인</a></li>
-            <li><a href="javascript:;">기업회원</a></li>
-          </ul>
+          <button class="menu-btn" onclick="changeMenu()">
+            <span></span><span></span><span></span>
+          </button>
         </div>
       </header>
       <main id="main">
@@ -667,39 +806,52 @@
           </div>
         </section>
       </main>
-      <!-- <footer id="footer">
-<div class="container">
-<div class="footer-menu"></div>
-<div class="footer-cs-info"></div>
-<div class="footer-comapny-info">
-<ul>
-<li>(주)오픈놀</li>
-<li>대표이사 : 권인택</li>
-<li>이메일 : help@miniintern.com</li>
-<li>문의 : 070-8221-3056</li>
-<li>서울특별시 영등포구 양평로 2 주식회사 오픈놀</li>
-<li>사업자등록번호 : 110-81-99930</li>
-<li>직업정보제공사업 : 서울서부 제2018-19호</li>
-<li>통신판매업신고 : 제2021-서울영등포-2467호</li>
-<li>유료직업소개사업등록번호 : 제2021-3180239-14-5-00015호</li>
-</ul>
-<a href="https://openknowl.com/">ⓒ OPENKNOWL</a>
-</div>
-</div>
-</footer> -->
+      <footer id="footer">
+        <div class="container">
+          <div class="footer-menu"></div>
+          <div class="footer-cs-info"></div>
+          <div class="footer-comapny-info">
+            <ul>
+              <li>(주)오픈놀</li>
+              <li>대표이사 : 권인택</li>
+              <li>이메일 : help@miniintern.com</li>
+              <li>문의 : 070-8221-3056</li>
+              <li>서울특별시 영등포구 양평로 2 주식회사 오픈놀</li>
+              <li>사업자등록번호 : 110-81-99930</li>
+              <li>직업정보제공사업 : 서울서부 제2018-19호</li>
+              <li>통신판매업신고 : 제2021-서울영등포-2467호</li>
+              <li>유료직업소개사업등록번호 : 제2021-3180239-14-5-00015호</li>
+            </ul>
+            <a href="https://openknowl.com/">ⓒ OPENKNOWL</a>
+          </div>
+        </div>
+      </footer>
     </div>
     <script>
+      const menuBtn = document.querySelector(".menu-btn");
+      const headerMenu = document.querySelector(".header-menu");
+
       const carousel = document.querySelector(".carousel");
       const carouselWrap = carousel.querySelector(".carousel-wrap");
       const carouselItem = carouselWrap.querySelectorAll(".carousel-item");
       const carouselIndex = carousel.querySelector(".carousel-index");
-
       const prevBtn = document.querySelector("#prevBtn");
       const nextBtn = document.querySelector("#nextBtn");
 
       let activeSlide = 0;
       let timer;
-      function init() {
+
+      function changeMenu() {
+        if (menuBtn.classList.contains("active")) {
+          menuBtn.classList.remove("active");
+          headerMenu.classList.remove("active");
+        } else {
+          menuBtn.classList.add("active");
+          headerMenu.classList.add("active");
+        }
+      }
+
+      function sliderInit() {
         let indexHtml = "";
         for (let i = 0; i < carouselItem.length; i++) {
           indexHtml += `<li><a href="javacript:;" onclick="changeSlider(${i})"></a></li>`;
@@ -739,7 +891,8 @@
         clearInterval(timer);
         timer = setInterval(moveSlide, 2000);
       }
-      init();
+
+      sliderInit();
     </script>
   </body>
 </html>
