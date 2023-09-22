@@ -87,14 +87,20 @@
         transition: all 0.3s ease 0s;
       }
       #header ul li a:hover,
-      #header ul li a.on {
+      #header ul li a.active {
         color: rgb(56, 64, 64);
       }
-      #header ul li a.on:after {
+      #header ul li a.active:after {
         opacity: 1;
         transform: scaleX(1);
       }
-      #header .header-menu > ul li:not(:first-child) a {
+      #header .header-menu .right-menu ul {
+        display: none;
+      }
+      #header .header-menu .right-menu #nomalMenu {
+        display: flex;
+      }
+      #header .header-menu .right-menu li:not(:first-child) a {
         color: rgb(23, 161, 255);
       }
       #header .menu-btn {
@@ -141,6 +147,10 @@
         left: 5px;
         transform: rotate(-45deg);
         transform-origin: bottom left;
+      }
+      #userInfo {
+        color: orange;
+        padding: 5px;
       }
       #main {
       }
@@ -423,7 +433,88 @@
       #footer .container a {
         color: rgb(147, 153, 153);
         font-size: 12px;
+        font-weight: 1.5;
       }
+
+      #login {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 10;
+      }
+      #loginWrap {
+        padding: 30px;
+        background: #fff;
+        text-align: center;
+        margin: 0 15px;
+      }
+      #loginWrap h3 {
+        font-weight: 700;
+        font-size: 25px;
+      }
+      #loginWrap p {
+        margin-top: 10px;
+      }
+      #loginWrap fieldset {
+        border: 0 none;
+      }
+      #loginWrap ul {
+        margin: 30px 0;
+        text-align: left;
+      }
+      #loginWrap ul li {
+        margin-top: 10px;
+        display: flex;
+        gap: 5px;
+        align-items: start;
+        justify-content: center;
+      }
+      #loginWrap ul li div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      #loginWrap ul li .message {
+        display: none;
+        color: red;
+        font-size: 12px;
+      }
+      #loginWrap ul li.error .message {
+        display: block;
+      }
+      #loginWrap ul li label {
+        width: 100px;
+        font-size: 18px;
+        padding-top: 10px;
+      }
+      #loginWrap ul li input {
+        flex: 1 0 auto;
+        width: 300px;
+        padding: 10px;
+      }
+      #loginBtn,
+      #joinBtn {
+        display: block;
+        width: 100%;
+        background: rgb(23, 161, 255);
+        border: 0 none;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1;
+        padding: 10px 0;
+      }
+      #joinBtn {
+        margin-top: 5px;
+        background: rgb(147, 153, 153);
+      }
+
       /* 태블릿? */
       @media (max-width: 1079px) {
         #header {
@@ -461,8 +552,13 @@
         #header ul li a {
           padding: 5px;
         }
-        #header ul.right-menu {
+        #header .right-menu {
           margin-top: 10px;
+        }
+        #header .right-menu li {
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
         #header .menu-btn {
           display: block;
@@ -482,6 +578,7 @@
           flex: 1 0 auto;
         }
       }
+
       /* 모바일 */
       @media (max-width: 767px) {
         .edu-list {
@@ -492,6 +589,16 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
+        }
+
+        #loginWrap ul li {
+          flex-direction: column;
+        }
+        #loginWrap ul li label {
+          width: 100%;
+        }
+        #loginWrap ul li div {
+          width: 100%;
         }
       }
     </style>
@@ -508,23 +615,32 @@
             /></a>
           </h1>
           <div class="header-menu">
-            <nav>
+            <nav class="left-menu">
               <h2 class="blind">미니인턴 menu</h2>
-              <ul class="left-menu">
-                <li><a class="on" href="javascript:;">Home</a></li>
+              <ul>
+                <li><a class="active" href="javascript:;">Home</a></li>
                 <li><a href="javascript:;">스킬업</a></li>
                 <li><a href="javascript:;">M클래스</a></li>
                 <li><a href="javascript:;">채용관</a></li>
                 <li><a href="javascript:;">해피폴리오</a></li>
               </ul>
             </nav>
-            <ul class="right-menu">
-              <li><a href="javascript:;">About</a></li>
-              <li><a href="javascript:;">회원가입</a></li>
-              <li><a href="javascript:;">로그인</a></li>
-              <li><a href="javascript:;">Contact</a></li>
-              <li><a href="javascript:;">FAQ</a></li>
-            </ul>
+            <div class="right-menu">
+              <ul id="nomalMenu">
+                <li><a href="javascript:;">About</a></li>
+                <li><a href="javascript:;">Contact</a></li>
+                <li><a href="javascript:;">FAQ</a></li>
+                <li>
+                  <a href="javascript:;" onclick=" openLogin()">로그인</a>
+                </li>
+                <li><a href="javascript:;">회원가입</a></li>
+              </ul>
+              <ul id="memberMenu">
+                <li><span id="userInfo"></span>님 반갑습니다.</li>
+                <li><a href="javascript:;">마이페이지</a></li>
+                <li><a href="javascript:;">로그아웃</a></li>
+              </ul>
+            </div>
           </div>
           <button class="menu-btn" onclick="changeMenu()">
             <span></span><span></span><span></span>
@@ -827,6 +943,52 @@
           </div>
         </div>
       </footer>
+      <div id="login">
+        <div id="loginWrap">
+          <h3>LOGIN</h3>
+          <p>서비스 이용을 위해 로그인 해주세요</p>
+          <form
+            name="loginForm"
+            action="javascript:goLogin();"
+            accept-charset="UTF-8"
+            method="post"
+          >
+            <fieldset>
+              <legend class="blind">로그인 정보 입력</legend>
+              <ul>
+                <li>
+                  <label for="uId">ID</label>
+                  <div>
+                    <input
+                      type="text"
+                      id="uId"
+                      name="uId"
+                      placeholder="아이디를 입력해주세요"
+                    />
+                    <span class="message">xcvxcvx</span>
+                  </div>
+                </li>
+                <li>
+                  <label for="uPassword">PASSWORD</label>
+                  <div>
+                    <input
+                      type="password "
+                      id="uPassword"
+                      name="uPassword"
+                      placeholder="비밀번호를 입력해주세요"
+                    />
+                    <span class="message upassword"></span>
+                  </div>
+                </li>
+              </ul>
+            </fieldset>
+            <button type="submit" id="loginBtn">로그인</button>
+            <a href="javascript:alert('준비중 입니다. ㅇㅅㅇ');" id="joinBtn"
+              >회원가입</a
+            >
+          </form>
+        </div>
+      </div>
     </div>
     <script>
       const menuBtn = document.querySelector(".menu-btn");
@@ -838,6 +1000,12 @@
       const carouselIndex = carousel.querySelector(".carousel-index");
       const prevBtn = document.querySelector("#prevBtn");
       const nextBtn = document.querySelector("#nextBtn");
+
+      const user = { name: "눈누난나", id: "user", password: "1234" };
+      const loginForm = document.loginForm;
+      const uIdField = loginForm.querySelectorAll("ul li")[0];
+      const uPwField = loginForm.querySelectorAll("ul li")[1];
+      const userInfo = document.querySelector("#userInfo");
 
       let activeSlide = 0;
       let timer;
@@ -891,6 +1059,59 @@
       function playSlider() {
         clearInterval(timer);
         timer = setInterval(moveSlide, 2000);
+      }
+
+      function openLogin() {
+        changeMenu();
+        document.querySelector("#login").style.display = "flex";
+      }
+
+      function goLogin() {
+        const uId = loginForm.uId.value;
+        const uPassword = loginForm.uPassword.value;
+        let msgId = "";
+        let msgPw = "";
+        let chkLogin = false;
+
+        uIdField.classList.add("error");
+        uPwField.classList.add("error");
+
+        if (
+          uId === "" ||
+          uId === undefined ||
+          uId === null ||
+          String(uId).length <= 0
+        ) {
+          msgId = "아이디를 입력해주세요.";
+        } else if (uId !== user["id"]) {
+          msgId = "아이디를 확인해 주세요.";
+        } else {
+          uIdField.classList.remove("error");
+        }
+
+        if (
+          uPassword === "" ||
+          uPassword === undefined ||
+          uPassword === null ||
+          String(uPassword).length <= 0
+        ) {
+          msgPw = "패스워드를 입력해주세요.";
+        } else if (uId === user["id"] && uPassword !== user["password"]) {
+          msgPw = "패스워드가 일치하지 않습니다.";
+        } else {
+          uPwField.classList.remove("error");
+          chkLogin = true;
+        }
+
+        uIdField.querySelector(".message").textContent = msgId;
+        uPwField.querySelector(".message").textContent = msgPw;
+        if (chkLogin) {
+          alert("로그인 되었습니다.");
+          document.querySelector("#login").style.display = "none";
+          document.querySelector("#nomalMenu").style.display = "none";
+          document.querySelector(" #memberMenu").style.display = "block";
+          userInfo.textContent = user["name"];
+        }
       }
 
       sliderInit();
