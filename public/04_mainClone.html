@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>04_mainClone</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        box-sizing: border-box;
+        text-decoration: none;
+      }
+      .container {
+        margin: 0 auto;
+        max-width: 930px;
+        width: 100%;
+      }
+      #header {
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        cursor: pointer;
+        height: 100%;
+        padding-left: 16px;
+        padding-right: 13px;
+        border-bottom: 1px solid rgba(0, 56, 68, 0.1);
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 10;
+      }
+      #header .container {
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        cursor: pointer;
+        justify-content: space-between;
+        max-width: 100%;
+        height: 100%;
+        padding-left: 16px;
+        padding-right: 13px;
+      }
+      #header h1 {
+        cursor: pointer;
+        height: 100%;
+        padding-left: 16px;
+        padding-right: 13px;
+      }
+      #header .header-left,
+      #header ul {
+        display: flex;
+        align-items: center;
+      }
+      #header ul li a {
+        position: relative;
+        font-size: 0.875rem;
+        cursor: pointer;
+        padding: 1.25rem 1rem;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        transition: color 0.2s ease-in-out 0s;
+        font-weight: 400;
+        color: rgb(171, 177, 177);
+      }
+      #header ul li a:after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0px;
+        right: 0px;
+        height: 2px;
+        opacity: 0;
+        background: rgb(23, 161, 255);
+        transform: scaleX(0);
+        transition: all 0.3s ease 0s;
+      }
+      #header ul li a:hover,
+      #header ul li a.on {
+        color: rgb(56, 64, 64);
+      }
+      #header ul li a.on:after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+      #header ul.header-right li:not(:first-child) a {
+        color: rgb(23, 161, 255);
+      }
+      #main {
+      }
+      .visual-wrap {
+        padding: 30px 0;
+        border-bottom: 1px solid rgba(0, 56, 68, 0.1);
+      }
+      .visual-wrap img {
+        display: block;
+        width: 100%;
+      }
+      .search-wrap {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        -webkit-box-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        align-items: center;
+        margin-bottom: 40px;
+        position: sticky;
+        top: 58px;
+        left: 0;
+        background: #fff;
+        z-index: 10;
+      }
+      .search-wrap .container,
+      .search-wrap .container div {
+        display: flex;
+        -webkit-box-pack: center;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        align-items: center;
+        gap: 16px;
+      }
+      .search-wrap select,
+      .search-wrap input,
+      .search-wrap button {
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        align-items: center;
+        cursor: pointer;
+        padding: 6px 15px 6px 8px;
+        border-radius: 5px;
+        border: 1px solid rgb(210, 215, 215);
+        color: inherit !important;
+        background: #fff;
+      }
+      .search-wrap button {
+        padding: 6px 10px;
+      }
+      .edu-list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        width: 936px;
+        margin-bottom: 24px;
+      }
+      .edu-list li {
+        width: 100%;
+        opacity: 1;
+        cursor: pointer;
+        list-style: none;
+      }
+      .edu-list li a {
+        display: block;
+        width: 216px;
+        border-radius: 5px;
+        box-shadow: rgba(26, 27, 28, 0.12) 0px 4px 8px 0px;
+        transition: transform 0.4s ease 0s, box-shadow 0.4s ease 0s;
+      }
+      .edu-list li a:hover {
+        transform: translateY(-8px);
+      }
+      .edu-list li a div.img-wrap {
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: border 0.2s ease 0s;
+        border: 0 solid transparent;
+      }
+      .edu-list li a:hover div.img-wrap {
+        border: 4px solid orange;
+      }
+      .edu-list li a div.img-wrap img {
+        display: block;
+        width: 100%;
+      }
+      .edu-list li a div.img-wrap span {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        transition: transform 0.2s ease 0s;
+        background: orange;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px 20px;
+        transform: translateX(90%);
+      }
+      .edu-list li a:hover div.img-wrap span {
+        transform: translateX(0);
+      }
+      .edu-list li a .text-wrap {
+        padding: 12px 12px 15px;
+      }
+      .edu-list li a .text-wrap div {
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        gap: 8px;
+      }
+      .edu-list li a .text-wrap .dday {
+        border-radius: 10px;
+        background-color: rgb(56, 64, 64);
+        display: block;
+        color: white;
+        padding: 1px 8px;
+        font-size: 12px;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+      .edu-list li a .text-wrap .value {
+        color: rgb(147, 153, 153);
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .edu-list li a .text-wrap .title {
+        margin-top: 8px;
+        font-weight: bold;
+        height: 42px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        color: rgb(26, 27, 28);
+        line-height: 1.5;
+      }
+      #footer {
+        border-top: 1px solid #e5eaea;
+        padding: 27px 0px 37px;
+      }
+      #footer .container > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <!--
+        5일 차 미션 : 미니인턴 서비스 메인페이지 클론
+
+        * 요청사항
+        💡HTML, CSS를 활용하여 메인 페이지 클론 코딩
+        💡슬라이드는 구현하지 않음, 슬라이드 영역은 이미지로 대체
+        💡(선택사항) 마우스 호버 시 애니메이션 등 기능 구현 
+      -->
+      <header id="header">
+        <div class="container">
+          <div class="header-left">
+            <h1>
+              <a href="javascript:;"
+                ><img
+                  src="https://via.placeholder.com/135x24.jpg"
+                  alt="135 * 24 size image"
+              /></a>
+            </h1>
+            <nav>
+              <h2></h2>
+              <ul>
+                <li><a class="on" href="javascript:;">미니인턴</a></li>
+                <li><a href="javascript:;">스킬업</a></li>
+                <li><a href="javascript:;">M클래스</a></li>
+                <li><a href="javascript:;">채용관</a></li>
+                <li><a href="javascript:;">해피폴리오</a></li>
+              </ul>
+            </nav>
+          </div>
+          <ul class="header-right">
+            <li><a href="javascript:;">서비스 소개</a></li>
+            <li><a href="javascript:;">회원가입</a></li>
+            <li><a href="javascript:;">로그인</a></li>
+            <li><a href="javascript:;">기업회원</a></li>
+          </ul>
+        </div>
+      </header>
+      <main id="main">
+        <section>
+          <div class="visual-wrap">
+            <div class="container">
+              <img
+                src="https://via.placeholder.com/1872x400.jpg"
+                alt="1872 * 400 size image"
+              />
+            </div>
+          </div>
+          <div class="search-wrap">
+            <div class="container">
+              <div class="search-left">
+                <select name="" id="">
+                  <option value="">전체</option>
+                </select>
+                <select name="" id="">
+                  <option value="">분야</option>
+                </select>
+              </div>
+              <div class="search-right">
+                <input type="text" />
+                <button>검색</button>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <ul class="edu-list">
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title"
+                      >제목목목제목목목제목목목제목목목제목목목제목목목제목목목제목목목제목목목제목목목제목목목제목목목</span
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img-wrap">
+                    <img
+                      src="https://via.placeholder.com/592x444.jpg"
+                      alt="592 * 444 size image"
+                    /><span>교육형</span>
+                  </div>
+                  <div class="text-wrap">
+                    <div>
+                      <span class="dday">D-9</span
+                      ><span class="value">마케팅</span>
+                    </div>
+                    <span class="title">제목목목</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+      <!-- <footer id="footer">
+        <div class="container">
+          <div class="footer-menu"></div>
+          <div class="footer-cs-info"></div>
+          <div class="footer-comapny-info">
+            <ul>
+              <li>(주)오픈놀</li>
+              <li>대표이사 : 권인택</li>
+              <li>이메일 : help@miniintern.com</li>
+              <li>문의 : 070-8221-3056</li>
+              <li>서울특별시 영등포구 양평로 2 주식회사 오픈놀</li>
+              <li>사업자등록번호 : 110-81-99930</li>
+              <li>직업정보제공사업 : 서울서부 제2018-19호</li>
+              <li>통신판매업신고 : 제2021-서울영등포-2467호</li>
+              <li>유료직업소개사업등록번호 : 제2021-3180239-14-5-00015호</li>
+            </ul>
+            <a href="https://openknowl.com/">ⓒ OPENKNOWL</a>
+          </div>
+        </div>
+      </footer> -->
+    </div>
+  </body>
+</html>
