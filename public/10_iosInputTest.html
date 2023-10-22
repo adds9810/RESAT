@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>10_iosInputTest</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        box-sizing: border-box;
+        text-decoration: none;
+      }
+      input {
+        max-height: none;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 24px;
+        color: #111827 !important;
+        letter-spacing: 0;
+      }
+      input:disabled {
+        color: #9ca3af !important;
+        opacity: 1;
+        -webkit-opacity: 1;
+        -webkit-text-fill-color: #9ca3af !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <!-- 
+        * iso에서는 disabled일 때 강제로 css설정이 있어 필요에 따라 풀어줘야 한다
+        opacity: 1;
+        -webkit-opacity: 1;
+        -webkit-text-fill-color: #9ca3af !important;
+      -->
+      <h1>input test</h1>
+      <input type="text" disabled value="충남 서산시 서산군 101" />
+    </div>
+    <script></script>
+  </body>
+</html>
